@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahmad Deny Ardiansyah — UI/UX Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0f1628;
+  --panel: #1A2236;
+  --panel-2: #212A42;
+  --cyan: #22D3EE;
+  --text: #E7ECF5;
+  --text-dim: #8C96AC;
+  --border: #2A334C;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
+body.no-scroll { overflow: hidden; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; }
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+section { padding: 90px 8%; max-width: 1200px; margin: 0 auto; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes photoIn { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes ring { 0%, 100% { box-shadow: 0 0 0 10px rgba(34,211,238,.08); } 50% { box-shadow: 0 0 0 18px rgba(34,211,238,.02); } }
+
+.progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; background: var(--cyan); transform: scaleX(0); transform-origin: left; z-index: 100; }
+
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 8%; position: sticky; top: 0; z-index: 10; background: rgba(15,22,40,.88); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); transition: border-color .2s; }
+.nav--scrolled { border-bottom-color: var(--cyan); }
+.nav__logo { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+.nav__logo span { color: var(--cyan); }
+.nav__links { display: flex; gap: 30px; }
+.nav__links a { font-size: 14px; color: var(--text-dim); transition: color .2s; position: relative; }
+.nav__links a::after { content: ""; position: absolute; left: 0; bottom: -6px; height: 2px; width: 100%; background: var(--cyan); transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease); }
+.nav__links a:hover::after, .nav__links a.is-active::after { transform: scaleX(1); }
+.nav__links a:hover, .nav__links a.is-active { color: var(--cyan); }
+.nav__cta { border: 1px solid var(--cyan); color: var(--cyan); padding: 8px 18px; border-radius: 8px; font-size: 14px; transition: .2s; }
+.nav__cta:hover { background: var(--cyan); color: var(--bg); }
+.nav__toggle { display: none; flex-direction: column; gap: 5px; width: 28px; background: none; border: none; cursor: pointer; }
+.nav__toggle span { height: 2px; background: var(--text); border-radius: 2px; transition: .25s; }
+.nav__toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav__toggle.is-open span:nth-child(2) { opacity: 0; }
+.nav__toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.hero { background: linear-gradient(rgba(15,22,40,.65), rgba(15,22,40,.8)), url('images/hero-bg.jpeg') center 55% / cover no-repeat; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; gap: 48px; padding-top: 110px; padding-bottom: 100px; }
+.hero__text { max-width: 620px; }
+.hero__eyebrow { color: var(--cyan); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 18px; animation: rise .8s var(--ease) .1s both; }
+.hero__title { font-size: clamp(30px, 4.6vw, 50px); line-height: 1.15; margin-bottom: 22px; animation: rise .8s var(--ease) .25s both; }
+.hero__title span { color: var(--cyan); }
+.hero__desc { color: var(--text-dim); font-size: 17px; margin-bottom: 34px; animation: rise .8s var(--ease) .4s both; }
+.hero__actions { display: flex; gap: 14px; flex-wrap: wrap; animation: rise .8s var(--ease) .55s both; }
+
+.photo { flex-shrink: 0; width: 280px; height: 280px; border-radius: 50%; overflow: hidden; border: 3px solid var(--cyan); background: linear-gradient(135deg, var(--panel-2), var(--bg)); display: grid; place-items: center; font-family: var(--font-display); font-size: 64px; font-weight: 700; color: var(--cyan); box-shadow: 0 0 0 10px rgba(34,211,238,.08); animation: photoIn .9s var(--ease) .3s both, float 6s ease-in-out 1.2s infinite, ring 6s ease-in-out 1.2s infinite; }
+.photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.btn { display: inline-block; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; transition: transform .15s, background .2s, border-color .2s, box-shadow .2s; }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0) scale(.97); }
+.btn--primary { background: var(--cyan); color: var(--bg); border: 1px solid var(--cyan); }
+.btn--primary:hover { background: #4FE0F5; box-shadow: 0 8px 24px rgba(34,211,238,.28); }
+.btn--ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn--ghost:hover { border-color: var(--cyan); }
+
+.section-head { margin-bottom: 44px; }
+.section-label { color: var(--cyan); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.section-head h2 { font-size: 30px; }
+
+.about__text { color: var(--text-dim); max-width: 720px; }
+.about__text strong { color: var(--text); }
+
+.edu-table-wrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; }
+.edu-table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px; }
+.edu-table th { text-align: left; padding: 14px 18px; font-family: var(--font-display); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--cyan); background: var(--panel-2); border-bottom: 1px solid var(--border); }
+.edu-table td { padding: 16px 18px; color: var(--text-dim); border-bottom: 1px solid var(--border); }
+.edu-table td:first-child { color: var(--text); font-weight: 500; }
+.edu-table tbody tr { transition: background .2s; }
+.edu-table tbody tr:hover { background: rgba(34,211,238,.06); }
+.edu-table tbody tr:last-child td { border-bottom: none; }
+
+.work__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 26px; }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform .25s var(--ease), border-color .2s, box-shadow .25s; }
+.card:hover { transform: translateY(-6px); border-color: var(--cyan); box-shadow: 0 14px 34px rgba(0,0,0,.35); }
+.card__thumb { height: 180px; background: linear-gradient(135deg, var(--panel-2), var(--bg)); position: relative; overflow: hidden; }
+.card__thumb::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(34,211,238,.22), transparent 60%); pointer-events: none; }
+.card__thumb img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1; transition: transform .6s var(--ease); }
+.card:hover .card__thumb img { transform: scale(1.07); }
+.card__body { padding: 22px; }
+.card__tag { font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+.card__body h3 { font-size: 19px; margin-bottom: 10px; }
+.card__body p { color: var(--text-dim); font-size: 14px; margin-bottom: 16px; }
+.card__link { font-size: 14px; color: var(--cyan); font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; transition: letter-spacing .25s; }
+.card:hover .card__link { letter-spacing: .03em; }
+
+.modal { position: fixed; inset: 0; z-index: 50; display: none; align-items: flex-start; justify-content: center; padding: 5vh 16px; background: rgba(6,10,20,.82); backdrop-filter: blur(4px); overflow-y: auto; }
+.modal.is-open { display: flex; animation: fade .25s ease; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+.modal__panel { position: relative; width: 100%; max-width: 880px; background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 36px; animation: rise .4s var(--ease); }
+.modal__close { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 20px; cursor: pointer; transition: .2s; }
+.modal__close:hover { border-color: var(--cyan); color: var(--cyan); transform: rotate(90deg); }
+.modal__tag { color: var(--cyan); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+.modal__title { font-size: 30px; margin-bottom: 18px; padding-right: 40px; }
+.modal__meta { display: flex; flex-wrap: wrap; gap: 10px 28px; padding: 14px 0; margin-bottom: 20px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.modal__meta div span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); }
+.modal__meta div b { font-weight: 500; font-size: 14px; }
+.modal__desc { color: var(--text-dim); margin-bottom: 28px; }
+.modal__sub { font-size: 18px; margin-bottom: 14px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.shot { position: relative; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: linear-gradient(135deg, var(--panel-2), var(--bg)); display: grid; place-items: center; text-align: center; padding: 10px; animation: rise .5s var(--ease) var(--d, 0s) backwards; }
+.shot span { font-size: 12px; color: var(--text-dim); }
+.shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
+.shot:hover img { transform: scale(1.05); }
+
+.skills__list { display: flex; flex-wrap: wrap; gap: 12px; }
+.skill-item { background: var(--panel); border: 1px solid var(--border); padding: 10px 18px; border-radius: 999px; font-size: 14px; color: var(--text-dim); transition: transform .2s, border-color .2s, color .2s; }
+.skill-item:hover { transform: translateY(-3px); border-color: var(--cyan); color: var(--cyan); }
+
+.contact { text-align: center; padding-top: 70px; padding-bottom: 80px; }
+.contact h2 { font-size: 30px; margin-bottom: 12px; }
+.contact p { color: var(--text-dim); margin-bottom: 28px; }
+.contact__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.copy-feedback { display: block; margin-top: 14px; height: 18px; font-size: 13px; color: var(--cyan); opacity: 0; transition: opacity .3s; }
+.copy-feedback.show { opacity: 1; }
+
+.footer { text-align: center; padding: 28px 8%; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 13px; }
+
+.reveal { opacity: 0; }
+.reveal--visible { opacity: 1; animation: rise .8s var(--ease) var(--d, 0s) backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; }
+  html { scroll-behavior: auto; }
+}
+
+@media (max-width: 760px) {
+  .nav__toggle { display: flex; }
+  .nav__cta { display: none; }
+  .nav__links { position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 18px; padding: 0 8%; background: var(--panel); border-bottom: 1px solid var(--border); max-height: 0; overflow: hidden; opacity: 0; transition: max-height .3s, opacity .3s, padding .3s; }
+  .nav__links.is-open { max-height: 300px; opacity: 1; padding: 20px 8%; }
+  section { padding: 64px 6%; }
+  .hero { flex-direction: column-reverse; text-align: center; padding-top: 60px; }
+  .hero__actions { justify-content: center; }
+  .photo { width: 200px; height: 200px; font-size: 48px; }
+  .modal__panel { padding: 24px 20px; }
+  .modal__title { font-size: 24px; }
+}
+</style>
+</head>
+
+<body>
+
+  <div class="progress" id="progress"></div>
+
+  <header class="nav">
+    <div class="nav__logo">Ahmad Deny Ardiansyah<span>.</span></div>
+    <nav class="nav__links" id="navLinks">
+      <a href="#about">Tentang</a>
+      <a href="#education">Pendidikan</a>
+      <a href="#work">Karya</a>
+      <a href="#skills">Skill</a>
+      <a href="#contact">Kontak</a>
+    </nav>
+    <a href="#contact" class="nav__cta">Hire Me</a>
+    <button class="nav__toggle" id="navToggle" aria-label="Buka menu"><span></span><span></span><span></span></button>
+  </header>
+
+  <section class="hero">
+    <div class="hero__text">
+      <p class="hero__eyebrow">UI/UX Designer — Semarang, ID</p>
+      <h1 class="hero__title">Merancang antarmuka yang <span>rapi</span>, <span>jelas</span>, dan mudah digunakan.</h1>
+      <p class="hero__desc">Saya Ahmad Deny Ardiansyah, mendesain produk digital dari riset sampai prototipe — Saya fokus dibidang web app dan sistem desain yang konsisten supaya pengguna memiliki pengalaman yang lebih baik.</p>
+      <div class="hero__actions">
+        <a href="#work" class="btn btn--primary">Lihat Karya</a>
+        <a href="#contact" class="btn btn--ghost">Hubungi Saya</a>
+      </div>
+    </div>
+
+    <div class="photo"><img src="images/profileden.jpeg" alt="Ahmad Deny Ardiansyah"></div>
+  </section>
+
+  <section id="about">
+    <div class="section-head">
+      <p class="section-label">Tentang</p>
+      <h2>Sedikit cerita tentang saya</h2>
+    </div>
+    <p class="about__text">
+      Saya belajar desain UI/UX lewat praktik langsung di Figma, mulai dari komponen dasar sampai
+      membangun sistem desain penuh untuk aplikasi web. Saat ini saya mengerjakan
+      <strong>Si SMANSA SSO</strong>, portal sekolah untuk SMAN 1 Lingga, dan <strong>Order.in</strong>,
+      aplikasi pesan makanan secara online. Saya suka eksplorasi visual sebelum implementasi, supaya setiap layar
+      punya alasan desain yang jelas.
+    </p>
+  </section>
+
+  <section id="education">
+    <div class="section-head">
+      <p class="section-label">Pendidikan</p>
+      <h2>Riwayat pendidikan</h2>
+    </div>
+    <div class="edu-table-wrap">
+      <table class="edu-table">
+        <thead>
+          <tr><th>Jenjang</th><th>Institusi</th><th>Jurusan</th><th>Tahun</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>S1</td><td>Universitas PGRI, Semarang</td><td>Teknik Informatika</td><td>2025 – sekarang</td></tr>
+          <tr><td>SMA / SMK</td><td>001 Lingga</td><td>MIPA</td><td>2022 – 2025</td></tr>
+          <tr><td>SMP</td><td>MTs Aqidatunnajin</td><td>-</td><td>2019 – 2022</td></tr>
+          <tr><td>SD</td><td>001 Lingga</td><td>-</td><td>2013 – 2019</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="section-head">
+      <p class="section-label">Karya</p>
+      <h2>Project Terpilih</h2>
+    </div>
+    <div class="work__grid" id="workGrid"></div>
+  </section>
+
+  <section id="skills">
+    <div class="section-head">
+      <p class="section-label">Skill</p>
+      <h2>Yang saya kuasai</h2>
+    </div>
+    <div class="skills__list">
+      <div class="skill-item">UI Design</div>
+      <div class="skill-item">UX Research</div>
+      <div class="skill-item">Figma</div>
+      <div class="skill-item">Design System</div>
+      <div class="skill-item">Prototyping</div>
+      <div class="skill-item">HTML &amp; CSS</div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2>Mau kolaborasi atau butuh desain?</h2>
+    <p>Terbuka untuk project freelance UI/UX — jangan ragu untuk hubungi saya.</p>
+    <div class="contact__actions">
+      <a href="mailto:Kanzaazalea5@gmail.com" class="btn btn--primary">Kanzaazalea5@gmail.com</a>
+      <button class="btn btn--ghost" id="copyPhone" data-copy="081374706667"> 081374706667</button>
+    </div>
+    <span class="copy-feedback" id="copyFeedback"></span>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 Ahmad Deny Ardiansyah. Dibuat dengan HTML &amp; CSS.</p>
+  </footer>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+      <button class="modal__close" id="modalClose" aria-label="Tutup">×</button>
+      <p class="modal__tag" id="mTag"></p>
+      <h3 class="modal__title" id="mTitle"></h3>
+      <div class="modal__meta" id="mMeta"></div>
+      <p class="modal__desc" id="mDesc"></p>
+      <h4 class="modal__sub">Hasil Karya</h4>
+      <div class="gallery" id="mGallery"></div>
+      <a class="btn btn--primary" id="mLink" target="_blank" rel="noopener" style="display:none">Buka Prototipe →</a>
+    </div>
+  </div>
+
+<script>
+const PROJECTS = [
+  {
+    tag: 'Web App · Sistem Sekolah',
+    title: 'Si SMANSA SSO',
+    summary: 'Portal terpadu untuk siswa dan admin: ekskul, pengaduan, e-library, sertifikat, hingga bimbingan konseling.',
+    desc: 'Portal sekolah untuk SMAN 1 Lingga yang menggabungkan banyak layanan dalam satu akun. Fokus desainnya adalah navigasi yang jelas untuk siswa dan dashboard yang rapi untuk admin, dengan sistem desain bertema navy dan cyan yang konsisten di semua halaman.',
+    role: 'UI/UX Designer', tools: 'Figma', year: '2026',
+    thumb: 'images/sso-cover.png',
+    images: ['images/sso-1.png', 'images/sso-2.png', 'images/sso-3.png', 'images/sso-4.png', 'images/sso-5.png', 'images/sso-6.png', 'images/sso-7.png', 'images/sso-8.png', 'images/sso-9.png', 'images/sso-10.png', 'images/sso-11.png', 'images/sso-12.png', 'images/sso-13.png', 'images/sso-14.png'],
+    link: 'https://www.figma.com/design/LfbGr0gsBcK3Vwcm1W70Lm/Untitled?node-id=0-1&t=XCIRhWRVeni6eULj-1'
+  },
+  {
+    tag: 'Mobile App · Baca Buku',
+    title: 'Buku Cerita',
+    summary: 'Aplikasi buku cerita untuk anak dengan warna hangat dan tipografi ramah untuk pembaca muda.',
+    desc: 'Aplikasi cerita anak dengan tampilan hangat dan mudah dibaca. Tipografi dibuat besar dan ramah, tombol mudah dijangkau, dan ilustrasi jadi pusat perhatian di setiap halaman cerita.',
+    role: 'UI/UX Designer', tools: 'Figma', year: '2026',
+    thumb: 'images/dongeng-cover.png',
+    images: ['images/dongeng-1.png'],
+    link: 'https://www.figma.com/design/cPY4C7zB7CXTST7IYR6TpR/Untitled?node-id=0-1&t=nZFqY0vv48Sb3Tum-1'
+  },
+  {
+    tag: 'Web App · Pesan Makanan',
+    title: 'Order.in',
+    summary: 'Sistem pesan makanan lewat web untuk warung dan resto: lihat menu, pilih, langsung pesan.',
+    desc: 'Konsep sistem pemesanan makanan lewat web untuk warung dan resto. Pelanggan bisa melihat menu, memilih pesanan, lalu langsung memesan tanpa perlu antre atau memanggil pelayan.',
+    role: 'UI/UX Designer', tools: 'Figma, HTML & CSS', year: '2026',
+    thumb: 'images/orderin-cover.png',
+    images: ['images/orderin-1.png', 'images/orderin-2.png', 'images/orderin-3.png'],
+    link: ''
+  },
+  {
+    tag: 'UI Kit · Website',
+    title: 'UI Kit Website Sekolah',
+    summary: 'Kumpulan komponen dan halaman siap pakai untuk website sekolah.',
+    desc: 'Kumpulan komponen UI dan template halaman untuk website sekolah di Figma, dibuat supaya sekolah bisa langsung memakai dan menyesuaikannya.',
+    role: 'UI Designer', tools: 'Figma', year: '2026',
+    thumb: 'images/uikit-cover.png',
+    images: ['images/uikit-1.png', 'images/uikit-2.png', 'images/uikit-3.png', 'images/uikit-4.png', 'images/uikit-5.png', 'images/uikit-6.png'],
+    link: ''
+  },
+  {
+    tag: 'Desktop App · Klinik',
+    title: 'Aplikasi Klinik RS TridayaSakti',
+    summary: 'Aplikasi desktop untuk mengelola data klinik, dibuat dengan Python.',
+    desc: 'Aplikasi desktop untuk mengelola data klinik, dibuat dengan Python (PyQt5) dengan penyimpanan data CSV dan dikemas menjadi file .exe. Fokus desainnya adalah antarmuka yang jelas dan rapi supaya mudah dipakai oleh staf klinik.',
+    role: 'UI Designer & Developer', tools: 'Python, PyQt5', year: '2026',
+    thumb: 'images/klinik-cover.png',
+    images: ['images/klinik-1.png', 'images/klinik-2.png', 'images/klinik-3.png', 'images/klinik-4.png', 'images/klinik-5.png', 'images/klinik-6.png'],
+    link: ''
+  },
+  {
+    tag: 'web app · tabungan',
+    title: 'Tabungan Digital',
+    summary: 'Web app untuk menabung, mengelola keuangan pribadi secara digital dan mudah di akses.',
+    desc: 'Web app untuk menabung dan mengelola keuangan pribadi secara digital, di buat dengan menggunakan Figma untuk desain UI/UX. desain yang saya buat ini memiliki tampilan yang bersih, modern, dan mudah digunakan oleh pengguna. Fitur-fitur yang ada di dalamnya meliputi dasboard, transaksi, anggaran, target, limit pengeluaran, dan pengaturan untuk mengubah warna dari tampilan web app ini.',
+    role: 'UI/UX Designer', tools: 'Figma', year: '2026',
+    thumb: 'images/tabungan-cover.png',
+    images: ['images/tabungan-1.png'],
+    link: ''
+  }
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = document.querySelector('.nav');
+  const navLinksWrap = document.getElementById('navLinks');
+  const toggleBtn = document.getElementById('navToggle');
+  const progress = document.getElementById('progress');
+
+  const grid = document.getElementById('workGrid');
+  PROJECTS.forEach((p, i) => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML =
+      '<div class="card__thumb"><img src="' + p.thumb + '" alt="' + p.title + '" loading="lazy" onerror="this.remove()"></div>' +
+      '<div class="card__body">' +
+        '<p class="card__tag">' + p.tag + '</p>' +
+        '<h3>' + p.title + '</h3>' +
+        '<p>' + p.summary + '</p>' +
+        '<button class="card__link" type="button">Lihat Detail →</button>' +
+      '</div>';
+    card.addEventListener('click', () => openModal(i));
+    grid.appendChild(card);
+  });
+
+  const modal = document.getElementById('modal');
+  const closeBtn = document.getElementById('modalClose');
+
+  function openModal(i) {
+    const p = PROJECTS[i];
+    document.getElementById('mTag').textContent = p.tag;
+    document.getElementById('mTitle').textContent = p.title;
+    document.getElementById('mDesc').textContent = p.desc;
+    document.getElementById('mMeta').innerHTML =
+      '<div><span>Peran</span><b>' + p.role + '</b></div>' +
+      '<div><span>Tools</span><b>' + p.tools + '</b></div>' +
+      '<div><span>Tahun</span><b>' + p.year + '</b></div>';
+    document.getElementById('mGallery').innerHTML = p.images.map((src, n) =>
+      '<figure class="shot" style="--d:' + Math.min(n * 0.06, 0.6) + 's"><span>' + src + '</span><img src="' + src + '" alt="Hasil karya ' + p.title + '" loading="lazy" onerror="this.remove()"></figure>'
+    ).join('');
+    const link = document.getElementById('mLink');
+    if (p.link) { link.href = p.link; link.style.display = 'inline-block'; } else { link.style.display = 'none'; }
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+    modal.scrollTop = 0;
+    closeBtn.focus();
+  }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+  }
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  toggleBtn.addEventListener('click', () => {
+    navLinksWrap.classList.toggle('is-open');
+    toggleBtn.classList.toggle('is-open');
+  });
+  navLinksWrap.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinksWrap.classList.remove('is-open');
+    toggleBtn.classList.remove('is-open');
+  }));
+
+  const revealEls = document.querySelectorAll('.section-head, .about__text, .edu-table-wrap, .card, .skill-item, .contact h2, .contact p, .contact__actions');
+  document.querySelectorAll('.card').forEach((el, i) => el.style.setProperty('--d', (i % 3) * 0.12 + 's'));
+  document.querySelectorAll('.skill-item').forEach((el, i) => el.style.setProperty('--d', i * 0.07 + 's'));
+  document.querySelectorAll('.contact p').forEach(el => el.style.setProperty('--d', '0.1s'));
+  document.querySelectorAll('.contact__actions').forEach(el => el.style.setProperty('--d', '0.2s'));
+
+  revealEls.forEach(el => el.classList.add('reveal'));
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => e.target.classList.toggle('reveal--visible', e.isIntersecting));
+  }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  const links = navLinksWrap.querySelectorAll('a');
+  const navObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      links.forEach(l => l.classList.toggle('is-active', l.getAttribute('href') === '#' + e.target.id));
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('section[id]').forEach(s => navObs.observe(s));
+
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('nav--scrolled', window.scrollY > 10);
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
+  }, { passive: true });
+
+  const copyBtn = document.getElementById('copyPhone');
+  const feedback = document.getElementById('copyFeedback');
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(copyBtn.dataset.copy);
+      feedback.textContent = 'Nomor disalin! ✓';
+    } catch (err) {
+      feedback.textContent = 'Gagal menyalin, salin manual ya.';
+    }
+    feedback.classList.add('show');
+    setTimeout(() => feedback.classList.remove('show'), 2000);
+  });
+});
+</script>
+</body>
+</html>
